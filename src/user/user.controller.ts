@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Get, ValidationPipe, UsePipes} from '@nestjs/common';
+import { Body, Controller, Post, Get, ValidationPipe, UsePipes, Param} from '@nestjs/common';
 import { CreateUserDto } from './dtos/createUser.dto';
 import { UserEntity } from './entities/user.entity';
 import { UserService } from './user.service';
@@ -21,6 +21,11 @@ export class UserController {
     @Get() 
     async getAllUser():Promise<ReturnUserDto[]> {
         return (await this.userService.getAlUser()).map((userEntity) => new ReturnUserDto(userEntity));
+    }
+
+    @Get('/:userId')
+    async getUserById(@Param('userId') userId: number):Promise<ReturnUserDto>{
+        return new ReturnUserDto(await this.userService.getUserByIdUsingRelations(userId)) ;
     }
    
 
